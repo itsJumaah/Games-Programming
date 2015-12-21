@@ -445,8 +445,8 @@ public class Lab5 extends GameEngine {
 		double dx = spaceshipPositionX - alPositionX;
 		double dy = spaceshipPositionY - alPositionY;
 		double l = length(dx, dy);
-		alVelocityX = dx / l * speed;
-		alVelocityY = dy / l * speed;
+//		alVelocityX = dx / l * speed;
+//		alVelocityY = dy / l * speed;
 		
 	}
 	
