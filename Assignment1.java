@@ -19,7 +19,7 @@ public class Assignment1 extends GameEngine {
 	int score1, score2;
 	String sscore1, sscore2;
 	
-	AudioClip beep;
+	AudioClip beep, score;
 
 	//-------------------------------------------------------
 	// players
@@ -36,7 +36,7 @@ public class Assignment1 extends GameEngine {
 		//update player 1
 		player1PositionX = 6;
 		
-		if(up1 && player1PositionY > 10) {
+		if(up1 && player1PositionY > 50) {
 			player1PositionY -= 500 * dt; 
 		}
 		else if(down1 && player1PositionY < (height() - 50)) {
@@ -44,14 +44,14 @@ public class Assignment1 extends GameEngine {
 		}
 		
 		//player 2
-		player2PositionX = width() -6;
-		
-		if(up2 && player2PositionY > 10) {
-			player2PositionY -= 500 * dt; 
-		}
-		else if(down2 && player2PositionY < (height() - 50)) {
-			player2PositionY += 500 * dt;
-		}
+		player2PositionX = width() - 6;
+//		
+//		if(up2 && player2PositionY > 50) {
+//			player2PositionY -= 500 * dt; 
+//		}
+//		else if(down2 && player2PositionY < (height() - 50)) {
+//			player2PositionY += 500 * dt;
+//		}
 
 	}
 
@@ -63,11 +63,12 @@ public class Assignment1 extends GameEngine {
 		// Save the current transform
 		saveCurrentTransform();
 
-		// ranslate to the position of the ball
-		translate(player1PositionX, player1PositionY);
+		
+		// to move the position to the center
+		translate(player1PositionX - 3, player1PositionY - 50); 
 
 		// Draw the actual spaceship
-		drawLine(0,  0,  0,  100, 5);
+		drawLine(0,  0,  0,  100, 6);
 
 		// Restore last transform to undo the rotate and translate transforms
 		restoreLastTransform();
@@ -81,12 +82,12 @@ public class Assignment1 extends GameEngine {
 		// Save the current transform
 		saveCurrentTransform();
 
-		// ranslate to the position of the ball
-		translate(player2PositionX, player2PositionY);
+		// to move the position to the center
+		translate(player2PositionX + 3, player2PositionY - 50);
 
 		// Draw the actual spaceship
 		//drawLine((width() - 5),  0,  (width() - 5),  50, 5);
-		drawLine(0,  0,  0,  100, 5);
+		drawLine(0,  0,  0,  100, 6);
 
 		// Restore last transform to undo the rotate and translate transforms
 		restoreLastTransform();
@@ -103,12 +104,12 @@ public class Assignment1 extends GameEngine {
 		//translate(height(), width());
 
 		// Draw upper horizonal line
-		drawLine( 10 ,  5,  (width() - 10),  5, 5);
+		drawLine( 9 ,  5,  (width() - 9),  5, 6);
 		//draw the lower horizontal line
-		drawLine( 10 ,  (height() - 5),  (width() - 10),  (height() - 5), 5);
+		drawLine( 9 ,  (height() - 5),  (width() - 9),  (height() - 5), 6);
 		//draw the doted line in the middle
 		for(int i =0; i < height(); i=i+30) {
-			drawLine((width()/2), i, (width()/2), i+10, 5);
+			drawLine((width()/2), i, (width()/2), i+10, 6);
 		}
 		
 		// Restore last transform to undo the rotate and translate transforms
@@ -131,11 +132,11 @@ public class Assignment1 extends GameEngine {
 	public void createBall() {
 		// Generate a new ball
 		
-		ballPositionX = rand(400);
-		ballPositionY = rand(400);
+		ballPositionX = 250;
+		ballPositionY = 250;
 
-		ballVelocityX = 100;
-		ballVelocityY = 100;
+		ballVelocityX = 200;
+		ballVelocityY = 200;
 	}
 
 	// Function to update 'move' the asteroid
@@ -155,13 +156,12 @@ public class Assignment1 extends GameEngine {
 		}
 		
 		// If the ball hit the edge of the screen it bounce off and the speed increases
-		if(ballPositionY <= 0 || ballPositionY >= height()) {
+		if(ballPositionY <= (8 + ballRadius) || ballPositionY >= (height() - 8 - ballRadius)) {
+			playAudio(beep);
 			if(ballVelocityY > 0) {
-				playAudio(beep);
 				ballVelocityY = (ballVelocityY *-1);// -10;
 			}
 			else {
-				playAudio(beep);
 				ballVelocityY = (ballVelocityY *-1);// +10;
 			}
 		}
@@ -222,7 +222,8 @@ public class Assignment1 extends GameEngine {
 		
 		//Sound?!
 		
-		beep = loadAudio("beep.wav");
+		beep  = loadAudio("beep.wav");
+		score = loadAudio("score.wav");
 		
 
 	}
@@ -252,43 +253,109 @@ public class Assignment1 extends GameEngine {
 		else if (score2 == 10) {
 			gameOver = true;
 		}
-
+		
+		//-------------------------------------------------------
+		// AI
+		//-------------------------------------------------------
+		//if the ball in the AI square
+		if(ballPositionX >= (width()/2)) {
+			if (ballPositionY > player2PositionY) {
+				player2PositionY += 2;
+			}
+			else {
+				player2PositionY -= 2;
+			}
+		}
+		//if the ball in the player square
+		//goes to the center
+		else {
+			if (player2PositionY < (height()/2)) {
+				player2PositionY += dt * 100;
+			}
+			else {
+				player2PositionY -= dt * 100;
+			}
+		}
+		
 		//-------------------------------------------------------
 		// Add code to check for collisions
 		//-------------------------------------------------------
-
-		// Detect Collision between Spaceship and Asteroid
-		if(distance(player1PositionX, player1PositionY, ballPositionX, ballPositionY) < 100) {
-			// Collision!
-			System.out.println("player 1 hit the ball");
-			
-			if(ballVelocityX >= 0) {
+		
+		
+		if(ballPositionX <= (8 + ballRadius)) {
+			if(ballPositionY <= (player1PositionY + 50) && ballPositionY >= (player1PositionY -50)) {
+				// Collision!
 				playAudio(beep);
-				ballVelocityX = (ballVelocityX *-1) -10;
+				//------BALL HIT EDGE
+				if(ballPositionY <= (player1PositionY + 50) && ballPositionY >= (player1PositionY + 30)) {
+					//bottom edge
+					if(ballVelocityY > 0) {
+						ballVelocityY = (ballVelocityY    ) +10;
+					}
+					else {
+						ballVelocityY = (ballVelocityY *-1) -10;
+					}
+				}
+				else if(ballPositionY >= (player1PositionY - 50) && ballPositionY <= (player1PositionY - 30)) {
+					//top edge
+					if(ballVelocityY > 0) {
+						ballVelocityY = (ballVelocityY *-1) -10;
+					}
+					else {
+						ballVelocityY = (ballVelocityY    ) +10;
+					}
+				}
+				
+				//----Ball hit center
+				
+				if(ballVelocityX > 0) {
+					ballVelocityX = (ballVelocityX *-1) -10;
+				}
+				else {
+					ballVelocityX = (ballVelocityX *-1) +10;
+				}
 			}
 			else {
-				playAudio(beep);
-				ballVelocityX = (ballVelocityX *-1) +10;
+				playAudio(score);
 			}
-		
 		}
 		
-		if(distance(player2PositionX, player2PositionY, ballPositionX, ballPositionY) < 100) {
-			// Collision!
-			System.out.println("player 2 hit the ball");
-			
-			if(ballVelocityX >= 0) {
+		else if(ballPositionX >= (width() - 8 - ballRadius)) {
+			if(ballPositionY <= (player2PositionY + 50) && ballPositionY >= (player2PositionY -50)) {
+				// Collision!
 				playAudio(beep);
-				ballVelocityX = (ballVelocityX *-1) -10;
+				//------BALL HIT EDGE
+				if(ballPositionY <= (player2PositionY + 50) && ballPositionY >= (player2PositionY + 30)) {
+					//bottom edge
+					if(ballVelocityY > 0) {
+						ballVelocityY = (ballVelocityY    ) +10;
+					}
+					else {
+						ballVelocityY = (ballVelocityY *-1) -10;
+					}
+				}
+				else if(ballPositionY >= (player2PositionY - 50) && ballPositionY <= (player2PositionY - 30)) {
+					//top edge
+					if(ballVelocityY > 0) {
+						ballVelocityY = (ballVelocityY *-1) -10;
+					}
+					else {
+						ballVelocityY = (ballVelocityY    ) +10;
+					}
+				}
+				
+				//----Ball hit center
+				if(ballVelocityX > 0) {
+					ballVelocityX = (ballVelocityX *-1) -10;
+				}
+				else {
+					ballVelocityX = (ballVelocityX *-1) +10;
+				}
 			}
 			else {
-				playAudio(beep);
-				ballVelocityX = (ballVelocityX *-1) +10;
+				playAudio(score);
 			}
-			
 		}
-		
-
 	}
 
 	// This gets called any time the Operating System
@@ -320,13 +387,13 @@ public class Assignment1 extends GameEngine {
 		else {
 			// If the game is over
 			// Display GameOver text
-			changeColor(white);
-			//drawText(85, 250, "GAME OVER!", "Arial", 50);
 			if(score1 == 10) {
-				drawText(75, 250, "PLAYER 1 WINS!", "Arial", 50);
+				changeColor(white);
+				drawText(85, 250, "YOU WON!", "Arial", 50);
 			}
 			else if (score2 == 10) {
-				drawText(75, 250, "PLAYER 2 WINS!", "Arial", 50);
+				changeColor(red);
+				drawText(85, 250, "GAME OVER!", "Arial", 50);
 			}
 		}
 	}
