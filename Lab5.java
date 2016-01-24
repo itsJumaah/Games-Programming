@@ -411,6 +411,8 @@ public class Lab5 extends GameEngine {
 	// Spaceship angle
 	double alAngle;
 	
+	double alSpeed;
+	
 	public void initAlien() {
 		alienImage = subImage(spritesheet, 0, 480, 240, 240);
 
@@ -421,6 +423,8 @@ public class Lab5 extends GameEngine {
 		
 		alVelocityX = 0;
 		alVelocityY = 0;
+		
+		alSpeed = 1;
 	}
 	
 	public void randomAlien() {
@@ -432,22 +436,37 @@ public class Lab5 extends GameEngine {
 	}
 	
 	public void drawAlien() {
-		
+		// Save the current transform
+		saveCurrentTransform();
+
+		// ranslate to the position of the asteroid
+		translate(alPositionX, alPositionY);
+
+		// Rotate the drawing context around the angle of the asteroid
+		rotate(alAngle);
+
+		// Draw the actual asteroid
+		drawImage(alienImage, -30, -30, 60, 60);
+
+		// Restore last transform to undo the rotate and translate transforms
+		restoreLastTransform();
 	}
 	
 	public void updateAlien(double dt) {
-		alPositionX += alVelocityX * -25.0 + rand(50.0) * dt;
-		alPositionY += alVelocityY * -25.0 + rand(50.0) * dt;
+//		alPositionX += alVelocityX * -25.0 + rand(50.0) * dt;
+//		alPositionY += alVelocityY * -25.0 + rand(50.0) * dt;
 		
-		alAngle = rand(360);
+		//alAngle = rand(360);
 		
 		
 		double dx = spaceshipPositionX - alPositionX;
 		double dy = spaceshipPositionY - alPositionY;
 		double l = length(dx, dy);
-//		alVelocityX = dx / l * speed;
-//		alVelocityY = dy / l * speed;
+		alVelocityX = dx / l * alSpeed;
+		alVelocityY = dy / l * alSpeed;
 		
+		alPositionX += alVelocityX;
+		alPositionY += alVelocityY;
 	}
 	
 	//-------------------------------------------------------
@@ -489,6 +508,9 @@ public class Lab5 extends GameEngine {
 
 		// Randomise Asteroid
 		randomAsteroid();
+		
+		initAlien();
+		randomAlien();
 	}
 
 	// Updates the display
@@ -509,6 +531,8 @@ public class Lab5 extends GameEngine {
 		updateAsteroid(dt);
 		
 		updateExplosion(dt);
+		
+		updateAlien(dt);
 
 		// Detect Collision between Laser and Asteroid
 		for(int i = 0; i < maxLasers; i++) {
@@ -553,6 +577,8 @@ public class Lab5 extends GameEngine {
 			
 			
 			drawExplosion();
+			
+			drawAlien();
 		} else {
 			// If the game is over
 			// Display GameOver text
