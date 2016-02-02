@@ -5,7 +5,7 @@ import stormtroopers.GameEngine;
 
 public class Animation {
 	
-	private int speed, index;
+	private int speed, index, num;
 	private Image[] frames;
 	
 	private long lastTime, timer;
@@ -16,6 +16,8 @@ public class Animation {
 		
 		index = 0;
 		timer = 0;
+		num	  = 0;
+		
 		lastTime = engine.getTime();
 		
 	}
@@ -26,6 +28,7 @@ public class Animation {
 		lastTime = engine.getTime();
 		
 		if(timer > speed) {
+			num++;
 			index++;
 			timer = 0;
 			if(index >= frames.length) {
@@ -34,14 +37,14 @@ public class Animation {
 		}
 	}
 	
-	
+	//---------
 	public void setCurrentFrame(int index) {
 		this.index = index;
 	}
-	
+	//---------
 	public Image getCurrentFrame() {
 		return frames[index];
-		
 	}
-
+	//---------
+	
 }

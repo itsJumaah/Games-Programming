@@ -18,6 +18,7 @@ public class MenuState extends State {
 	@Override
 	public void draw(GameEngine engine) {
 		// TODO Auto-generated method stub
+		engine.drawBoldText(100, 100, "hello");
 		
 	}
 

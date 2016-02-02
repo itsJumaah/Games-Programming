@@ -1,23 +1,29 @@
 package stormtroopers.entities;
 
+import java.awt.Color;
+
 import stormtroopers.GameEngine;
 import stormtroopers.MainGame;
-import stormtroopers.graphics.Animation;
 import stormtroopers.graphics.Assets;
 
 
 public class Player extends Creature {
 
-	private Assets assets;
-	private Animation animCoin;
+	private Assets asset;
+	//private Animation animCoin;
 	
 	
 	public Player(GameEngine engine, float x, float y) {
 	super(x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
 	
-		assets = new Assets(engine);
+		asset = new Assets(engine);
 		
-		animCoin = new Animation(2, assets.getCoin(), engine);
+		//animCoin = new Animation(2, asset.getCoin(), engine);
+		
+		bounds.x = 8;
+		bounds.y = 5;
+		bounds.width = 16;
+		bounds.height = 25;
 	}
 	
 	//------------
@@ -28,7 +34,7 @@ public class Player extends Creature {
 		checkInputs(engine);
 		move(dt);
 		
-		animCoin.update(engine);
+		//animCoin.update(engine);
 	}
 	
 	//---------
@@ -47,7 +53,10 @@ public class Player extends Creature {
 		// Draw the actual player
 		//engine.drawImage(assets.player, 0, 0, SQUARE_SIZE, SQUARE_SIZE);
 		//engine.drawImage(animCoin.getCurrentFrame(), 0, 0, width, height);
-		engine.drawImage(assets.getLeftGround(), 0, 0, width, height);
+		engine.drawImage(asset.getPlayer(), 0, 0, width, height);
+		
+		engine.changeColor(Color.red);
+		//engine.drawSolidRectangle((int) bounds.x, (int) bounds.y, bounds.width, bounds.height); //void public?
 		
 		
 
@@ -65,20 +74,20 @@ public class Player extends Creature {
 		if(control.up) {
 			yMove = -speed;
 		}
-		else if (control.down) {
+		if (control.down) {
 			yMove = speed;
 		}
-		else if (control.left) {
+		if (control.left) {
 			xMove = -speed;
 		}
-		else if (control.right) {
+		if (control.right) {
 			xMove = speed;
 		}
 		
 		//-------JUMP
 		if (control.space) {
 			if(midAir != true) {
-				upwardSpeed = jump;
+				yMove = jump;
 				midAir = true;
 			}
 		}

@@ -1,5 +1,7 @@
 package stormtroopers.entities;
 
+import java.awt.Rectangle;
+
 import stormtroopers.GameEngine;
 import stormtroopers.MainGame;
 
@@ -7,12 +9,15 @@ public abstract class Entity {
 
 	protected float x, y;
 	protected int width, height;
+	protected Rectangle bounds;
 	
 	public Entity(float x, float y, int width, int height) {
 		this.x = x;
 		this.y = y;
 		this.width 	= width;
 		this.height = height;
+		
+		bounds = new Rectangle(0, 0, width, height);
 		
 	}
 

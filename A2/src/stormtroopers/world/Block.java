@@ -3,44 +3,41 @@ package stormtroopers.world;
 import java.awt.Image;
 
 import stormtroopers.GameEngine;
-import stormtroopers.graphics.Assets;
 
 public class Block {
 	
-   	private Assets asset;
-	
-	public static Block[] block;
-	public static Block midGround, rightGround, underGround, leftGround;
-	
-	
 	//WORLD
-	protected Image texture;
-	protected final int id;
+	private final int id;
+	private Image texture;
+	private boolean solid, ladder;
 	
 	public static final int WIDTH = 32, HEIGHT = 32;
 
 	public Block(GameEngine engine, Image texture, int id) {
-		this.texture = texture;
 		this.id = id;
+		this.texture = texture;
+		//---------
+		if(id == 9) {
+			solid = false;
+		}
+		else {
+			solid = true;
+		}
+		//-----LADDER----
+		if(id == 18 || id == 10) {
+			solid  = false;
+			ladder = true;
+		}
+		else {
+			ladder = false;
+		}
+		//----------
 		
-		
-		asset = new Assets(engine);
-		
-		block = new Block[256];
-		
-		leftGround  = new Ground(engine, asset.getLeftGround(),  0);
-		rightGround = new Ground(engine, asset.getRightGround(), 1);
-		midGround   = new Ground(engine, asset.getMidGround(),   2);
-		underGround = new Ground(engine, asset.getUnderGround(), 3);
-		
-		block[id] = this;
 		
 	}
 	
-	public boolean isSolid() {
-		return true;
-	}
-	
+
+
 	public void update(double dt) {
 		
 	}
@@ -52,6 +49,13 @@ public class Block {
 		engine.restoreLastTransform();
 	}
 	
+	public boolean isSolid() {
+		return solid;
+	}
+	
+	public boolean isLadder() {
+		return ladder;
+	}
 	public int getId() {
 		return id;
 	}

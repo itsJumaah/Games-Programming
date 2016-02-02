@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 
 import stormtroopers.states.GameState;
 import stormtroopers.states.MenuState;
-import stormtroopers.states.SettingsState;
 import stormtroopers.states.State;
 
 
@@ -12,27 +11,28 @@ import stormtroopers.states.State;
 public class MainGame extends GameEngine{
 
 	
-	public boolean up, down, left, right, space;
+	public boolean up, down, left, right, space, x;
 	
-	private State gameState, menuState, settingsState;
+	private State gameState, menuState;
 	
 	//--------------------
 	//	INITIALIZE
 	//--------------------
 	public void init() {
-		setWindowSize(1280, 720);
+		setWindowSize(512, 512);
 		
 		up = false;
 		down = false;
 		left = false;
 		right = false;
 		space = false;
+		x = false;
 		
 		gameState = new GameState(this);
 		menuState = new MenuState(this);
-		settingsState = new SettingsState(this);
-		
+	
 		State.setState(gameState);
+		//State.setState(menuState);
 	}
 	//-----------------------
 	//UPDATE VALUES AND DRAWS
@@ -47,6 +47,7 @@ public class MainGame extends GameEngine{
 
 	@Override
 	public void paintComponent() {
+		
 		if(State.getState() != null) {
 			State.getState().draw(this);
 		}
@@ -74,6 +75,9 @@ public class MainGame extends GameEngine{
 		else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			space = true;
 		}
+		else if (e.getKeyCode() == KeyEvent.VK_X) {
+			x = true;
+		}
 	}
 	// Called whenever a key is released
 	public void keyReleased(KeyEvent e) {
@@ -91,6 +95,9 @@ public class MainGame extends GameEngine{
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			space = false;
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_X) {
+			x = false;
 		}
 	}
 }
