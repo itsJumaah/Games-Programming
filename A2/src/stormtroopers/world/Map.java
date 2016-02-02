@@ -6,6 +6,7 @@ import stormtroopers.GameEngine;
 import stormtroopers.MainGame;
 import stormtroopers.StormEngine;
 import stormtroopers.entities.Coin;
+import stormtroopers.entities.Key;
 import stormtroopers.entities.Player;
 import stormtroopers.graphics.Assets;
 
@@ -20,7 +21,7 @@ public class Map {
 	private static Block[] currentBlock;
 	private static Assets asset;
 	
-	private static Block floor, key, lock, watertop, darkspike, 
+	private static Block floor, lock, watertop, darkspike, 
 	lightspike, closedChest, brick, blank, coinn,
 	water, darkrock, lightrock, openedChest, woodenDoor,
 	brownDoor, steelDoor, ladder, miniPlat, rope;
@@ -30,6 +31,7 @@ public class Map {
 	private Player player;
 	private int playerX, playerY;
 	
+	private Key key;
 	private Coin coin, coin1, coin2;
 	private int coinX, coinY,
 				coin1X, coin1Y,
@@ -48,7 +50,10 @@ public class Map {
 
 		coin = new Coin(engine, coinX, coinY);
 		coin1 = new Coin(engine, coin1X, coin1Y);
-		coin2 = new Coin(engine, coin2X, coin2Y);	
+		coin2 = new Coin(engine, coin2X, coin2Y);
+		
+		key = new Key(engine, keyX, keyY);
+		
 		
 	}
 	//------
@@ -64,21 +69,17 @@ public class Map {
 		if(coin2.isExists()) {
 			coin2.update(control, player, dt);
 		}
+		
+		if(key.isExists()) {
+			key.update(control, player, dt);
+		}
 	}
 	//--------
 	public void draw(GameEngine engine) {
-//		engine.changeColor(Color.BLACK);
-//		engine.drawSolidRectangle(0, 0, 512, 512);
-//		for(int y = 0; y < height; y++) {
-//			for(int x = 0; x < width; x++) {
-//				getBlock(x, y).draw(engine, x * Block.WIDTH/2 , y * Block.HEIGHT/2);
-//				
-//			}
-//		}
-		
-		//-----
 		
 		drawMap(engine);
+		
+		player.draw(engine);
 		
 		if(coin.isExists()) {
 			coin.draw(engine);
@@ -90,7 +91,11 @@ public class Map {
 			coin2.draw(engine);
 		}
 		
-		player.draw(engine);
+		if(key.isExists()) {
+			key.draw(engine);
+		}
+		
+		
 	}
 	//---------
 	private void drawMap(GameEngine engine) {
@@ -158,8 +163,6 @@ public class Map {
 		//----------------
 		floor       = new Block(engine, asset.getFloor()      , 1);
 		currentBlock[1] = floor;
-		key         = new Block(engine, asset.getKey()        , 2);
-		currentBlock[2] = key;
 		lock        = new Block(engine, asset.getLock()       , 3);
 		currentBlock[3] = lock;
 		watertop    = new Block(engine, asset.getWatertop()   , 4);
@@ -174,7 +177,7 @@ public class Map {
 		currentBlock[8] = brick;
 		blank       = new Block(engine, asset.getBlank()      , 9);
 		currentBlock[9] = blank;
-		coinn       = new Block(engine, asset.getTopLadder()      , 10);
+		coinn       = new Block(engine, asset.getTopLadder()  , 10);
 		currentBlock[10] = coinn;
 		water		= new Block(engine, asset.getWater()	  , 11);
 		currentBlock[11] = water;
