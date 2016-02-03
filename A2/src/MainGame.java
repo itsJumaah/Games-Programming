@@ -1,10 +1,6 @@
-package stormtroopers;
+
 
 import java.awt.event.KeyEvent;
-
-import stormtroopers.states.GameState;
-import stormtroopers.states.MenuState;
-import stormtroopers.states.State;
 
 
 

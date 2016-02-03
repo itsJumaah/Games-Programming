@@ -1,5 +1,3 @@
-package stormtroopers;
-
 import java.awt.*;
 import java.awt.geom.*;
 
@@ -402,7 +400,7 @@ public abstract class GameEngine implements KeyListener, MouseListener, MouseMot
 	}
 
 	// This function fills in a rectangle at (x,y) with width and height (w,h)
-	public void drawSolidRectangle(double x, double y, double w, double h) {
+	void drawSolidRectangle(double x, double y, double w, double h) {
 		// Fill a Rectangle
 		mGraphics.fill(new Rectangle2D.Double(x, y, w, h));
 	}
@@ -556,7 +554,7 @@ public abstract class GameEngine implements KeyListener, MouseListener, MouseMot
 	}
 
 	// This function translates the drawing context by (x,y)
-	public void translate(double x, double y) {
+	void translate(double x, double y) {
 		// Translate the drawing context
 		mGraphics.translate(x,y);
 	}

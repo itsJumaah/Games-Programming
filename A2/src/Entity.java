@@ -1,9 +1,6 @@
-package stormtroopers.entities;
+
 
 import java.awt.Rectangle;
-
-import stormtroopers.GameEngine;
-import stormtroopers.MainGame;
 
 public abstract class Entity {
 

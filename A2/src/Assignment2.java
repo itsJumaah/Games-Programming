@@ -1,4 +1,4 @@
-package stormtroopers;
+
 
 public class Assignment2 {
 	// Main Function

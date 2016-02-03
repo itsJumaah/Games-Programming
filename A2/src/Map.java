@@ -1,14 +1,6 @@
-package stormtroopers.world;
+
 
 import java.awt.Color;
-
-import stormtroopers.GameEngine;
-import stormtroopers.MainGame;
-import stormtroopers.StormEngine;
-import stormtroopers.entities.Coin;
-import stormtroopers.entities.Key;
-import stormtroopers.entities.Player;
-import stormtroopers.graphics.Assets;
 
 public class Map {
 
@@ -29,14 +21,18 @@ public class Map {
 	//--- Player Class
 	
 	private Player player;
-	private int playerX, playerY;
+	public static int playerX, playerY;
 	
 	private Key key;
 	private Coin coin, coin1, coin2;
-	private int coinX, coinY,
-				coin1X, coin1Y,
-				coin2X, coin2Y,
-				keyX, keyY;
+	private static int coinX;
+	private static int coinY;
+	private static int coin1X;
+	private static int coin1Y;
+	private static int coin2X;
+	private static int coin2Y;
+	private static int keyX;
+	private static int keyY;
 	
 	
 	//---
@@ -58,7 +54,7 @@ public class Map {
 	}
 	//------
 	public void update(MainGame control, double dt) {
-		player.update(control, dt);
+		
 		
 		if(coin.isExists()) {
 			coin.update(control, player, dt);
@@ -73,13 +69,15 @@ public class Map {
 		if(key.isExists()) {
 			key.update(control, player, dt);
 		}
+		
+		player.update(control, dt);
 	}
 	//--------
 	public void draw(GameEngine engine) {
 		
 		drawMap(engine);
 		
-		player.draw(engine);
+		
 		
 		if(coin.isExists()) {
 			coin.draw(engine);
@@ -95,7 +93,7 @@ public class Map {
 			key.draw(engine);
 		}
 		
-		
+		player.draw(engine);
 	}
 	//---------
 	private void drawMap(GameEngine engine) {
@@ -126,7 +124,12 @@ public class Map {
 		}
 	}
 	//------
-	private void loadMap(String path) {
+	public static void openDoor() {
+		currentBlock[17] = blank;
+	}
+	
+	//----
+	public static void loadMap(String path) {
 		String file = StormEngine.loadFileString(path);
 		String[] numbers = file.split("\\s+"); //split on white space
 		

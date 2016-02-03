@@ -1,26 +1,24 @@
-package stormtroopers.graphics;
+
 
 import java.awt.Image;
 
-import stormtroopers.*;
 
 public class Assets {
 	
 	private static final int WIDTH = 40, HEIGHT = 40;
 	private static final int WWIDTH = 16, WHEIGHT = 16;
-	private Image coinsheet, tilesheet;
-	private Image entitiesheet, blocksheet;
+	private Image entitiesheet, blocksheet, coinsheet;
 	
 	
 	private Image[] coin;
-	private Image ground, noGround;
 	
 	private Image floor, key, lock, watertop, darkspike, 
 	lightspike, closedChest, brick, blank, topLadder,
 	water, darkrock, lightrock, openedChest, woodenDoor,
 	brownDoor, steelDoor, ladder, miniPlat, rope;
 	
-	private Image player;
+	private Image standR, standL, death;
+	private Image[] walkL, walkR, ladderA, jumpL, jumpR;
 	
 	
 	
@@ -29,10 +27,6 @@ public class Assets {
 		entitiesheet = engine.loadImage("res/entities.png");
 		
 		coinsheet = engine.loadImage("res/coin.png");
-		//tilesheet = engine.loadImage("res/tile.png");
-		
-//		noGround  = engine.subImage(tilesheet, 0 * WWIDTH + 0, 0          , WWIDTH, WHEIGHT);
-//		ground   = engine.subImage(tilesheet, 1 * WWIDTH + 1, 0          , WWIDTH, WHEIGHT);
 		
 		
 		floor      = engine.subImage(blocksheet, 0 * WWIDTH, 0 * WHEIGHT, WWIDTH, WHEIGHT);
@@ -61,8 +55,25 @@ public class Assets {
 		
 		//--------------
 		
-		player 		= engine.subImage(entitiesheet, 0 * WWIDTH, 0 * WHEIGHT, WWIDTH, WHEIGHT);
+		standR = engine.subImage(entitiesheet, 0 * WWIDTH, 0 * WHEIGHT, WWIDTH, WHEIGHT);
+		standL = engine.subImage(entitiesheet, 0 * WWIDTH, 1 * WHEIGHT, WWIDTH, WHEIGHT);
+		death  = engine.subImage(entitiesheet, 5 * WWIDTH, 0 * WHEIGHT, WWIDTH, WHEIGHT);
 		
+		//--
+		
+		walkL = new Image[2];
+		walkR = new Image[2];
+		ladderA = new Image[2];
+		jumpL = new Image[2];
+		jumpR = new Image[2];
+		
+		for(int i = 0; i < 2; i++) {
+			walkL[i]   = engine.subImage(entitiesheet, i * WWIDTH + (1 * WWIDTH)   , 1 * WHEIGHT, WWIDTH, WHEIGHT);
+			walkR[i]   = engine.subImage(entitiesheet, i * WWIDTH + (1 * WWIDTH)   , 0 * WHEIGHT, WWIDTH, WHEIGHT);
+			ladderA[i] = engine.subImage(entitiesheet,     WWIDTH + (2 * WWIDTH) -2, i * WHEIGHT, WWIDTH, WHEIGHT);
+			jumpL[i]   = engine.subImage(entitiesheet, i * WWIDTH 				   , 0 * WHEIGHT, WWIDTH, WHEIGHT);
+			jumpR[i]   = engine.subImage(entitiesheet, i * WWIDTH                  , 1 * WHEIGHT, WWIDTH, WHEIGHT);
+		}
 		
 		//----Coin
 		coin = new Image[10];
@@ -73,42 +84,41 @@ public class Assets {
 	}
 	
 	//------Player
-	public Image getPlayer() {
-		return player;
+	public Image getStandR() {
+		return standR;
+	}
+	public Image getStandL() {
+		return standL;
+	}
+	public Image getDeath() {
+		return death;
+	}
+
+	public Image[] getJumpL() {
+		return jumpL;
 	}
 	
-	//------
+	public Image[] getJumpR() {
+		return jumpR;
+	}
 
+	public Image[] getWalkL() {
+		return walkL;
+	}
+	
+	public Image[] getWalkR() {
+		return walkR;
+	}
+	
+	public Image[] getLadderA() {
+		return ladderA;
+	}
+
+//----- Entity
 	public Image[] getCoin() {
 		return coin;
 	}
-
-
-	public Image getGround() {
-		return ground;
-	}
-
-
-	public Image getNoGround() {
-		return noGround;
-	}
-
-	public Image getCoinsheet() {
-		return coinsheet;
-	}
-
-	public Image getTilesheet() {
-		return tilesheet;
-	}
-
-	public Image getEntitiesheet() {
-		return entitiesheet;
-	}
-
-	public Image getBlocksheet() {
-		return blocksheet;
-	}
-
+	
 	public Image getFloor() {
 		return floor;
 	}

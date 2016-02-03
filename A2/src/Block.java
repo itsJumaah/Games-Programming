@@ -1,15 +1,13 @@
-package stormtroopers.world;
+
 
 import java.awt.Image;
-
-import stormtroopers.GameEngine;
 
 public class Block {
 	
 	//WORLD
 	private final int id;
 	private Image texture;
-	private boolean solid, ladder;
+	private boolean solid, ladder, kill, next;
 	
 	public static final int WIDTH = 32, HEIGHT = 32;
 
@@ -17,7 +15,7 @@ public class Block {
 		this.id = id;
 		this.texture = texture;
 		//---------
-		if(id == 9) {
+		if(id == 9 || id == 15) {
 			solid = false;
 		}
 		else {
@@ -32,7 +30,19 @@ public class Block {
 			ladder = false;
 		}
 		//----------
-		
+		if(id == 5 || id == 6) {
+			kill = true;
+		}
+		else {
+			kill = false;
+		}
+		//----
+		if(id == 15) {
+			next = true;
+		}
+		else {
+			next = false;
+		}
 		
 	}
 	
@@ -49,12 +59,20 @@ public class Block {
 		engine.restoreLastTransform();
 	}
 	
+	public boolean isKill() {
+		return kill;
+	}
+	
 	public boolean isSolid() {
 		return solid;
 	}
 	
 	public boolean isLadder() {
 		return ladder;
+	}
+	
+	public boolean isDoor() {
+		return next;
 	}
 	public int getId() {
 		return id;

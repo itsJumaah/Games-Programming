@@ -1,7 +1,4 @@
-package stormtroopers.states;
 
-import stormtroopers.GameEngine;
-import stormtroopers.MainGame;
 
 public abstract class State {
 	

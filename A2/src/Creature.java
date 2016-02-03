@@ -1,10 +1,7 @@
-package stormtroopers.entities;
-
-import stormtroopers.world.Block;
-import stormtroopers.world.Map;
-
 public abstract class Creature extends Entity {
 
+	
+	
 	protected int health;
 	
 	protected float speed;
@@ -14,7 +11,7 @@ public abstract class Creature extends Entity {
 	protected float gravity;
 	protected float upwardSpeed;
 	
-	protected boolean midAir;
+	protected boolean onLadder, dead, levelup;
 	
 	public static final int   DEFAULT_HEALTH          = 10;
 	public static final int   DEFAULT_CREATURE_WIDTH  = 32,
@@ -32,12 +29,21 @@ public abstract class Creature extends Entity {
 		speed   = DEFAULT_SPEED;
 		jump    = -JUMP_POWER;
 		gravity = GRAVITY;
-		midAir = false;
 		upwardSpeed = 0;
+		onLadder = false;
+		dead = false;
+		levelup = false;
 		
 	}
 	
 	public void move(double dt) {
+		
+		if(isDoor((int)x/Block.WIDTH , (int)y/Block.HEIGHT) && isDoor((int)x / Block.WIDTH, (int) y / Block.HEIGHT)) {
+			levelup = true;
+		}
+		else {
+			levelup = false;
+		}
 		
 		moveX(dt);
 		moveY(dt);
@@ -55,6 +61,7 @@ public abstract class Creature extends Entity {
 					&& !collisionWithBlock(tempX, (int) (((y + bounds.y + bounds.height) / Block.HEIGHT) -0.5))) {
 				x += xMove * dt;
 			}
+			
 			else {
 				x = tempX * Block.WIDTH - bounds.x - bounds.width - 0.1f;
 			}
@@ -62,6 +69,8 @@ public abstract class Creature extends Entity {
 		//-----Moving left
 		else if(xMove < 0) {
 			int tempX = (int) (x + (xMove * dt) + bounds.x) / Block.WIDTH;
+			
+			//----
 			if(!collisionWithBlock(tempX, (int) (((y + bounds.y) / Block.HEIGHT ) -100)) 
 					&& !collisionWithBlock(tempX, (int) (((y + bounds.y + bounds.height) / Block.HEIGHT) -0.5))) {
 				x += xMove * dt;
@@ -76,8 +85,11 @@ public abstract class Creature extends Entity {
 		//----Going Up
 		if(yMove < 0) {
 			int tempY = (int) (y + (yMove * dt)+ bounds.y) / Block.HEIGHT; //top edge
+			
+			//---
+			
 			if(onLadder((int) (x + bounds.x) / Block.WIDTH, tempY)) {
-				
+				onLadder = true;
 				if(!collisionWithBlock((int) (x + bounds.x) / Block.WIDTH, tempY ) 
 						&& !collisionWithBlock((int) (x + bounds.x + bounds.width) / Block.WIDTH, tempY)) {
 					
@@ -91,7 +103,10 @@ public abstract class Creature extends Entity {
 		//----Going Down
 		if(yMove > 0) {
 			int tempY = (int) (y + (yMove * dt) + bounds.y + bounds.height) / Block.HEIGHT; //bottom edge
+			
+			//--
 			if(onLadder((int) (x + bounds.x) / Block.WIDTH, tempY)) {
+				onLadder = true;
 				if(!collisionWithBlock((int) (x + bounds.x) / Block.WIDTH, tempY) 
 						&& !collisionWithBlock((int) (x + bounds.x + bounds.width) / Block.WIDTH, tempY)) {
 					y += yMove * dt;
@@ -107,26 +122,36 @@ public abstract class Creature extends Entity {
 		//----- GRAVITY TO ENABLE JUMP
 		
 		int tempY = (int) (y + (yMove * dt) + bounds.y + bounds.height) / Block.HEIGHT; //bottom edge
-		if(!onLadder((int) (x + bounds.x)  / Block.WIDTH , tempY) 
-				&& !onLadder((int) (x + bounds.x + bounds.width) / Block.WIDTH, tempY)) {
+		if(!collisionWithSpike((int) (x + bounds.x)  / Block.WIDTH , tempY) 
+				&& !collisionWithSpike((int) (x + bounds.x + bounds.width) / Block.WIDTH, tempY)) {
 			
-			upwardSpeed += gravity * dt;
-			y += upwardSpeed * dt;
-
-			if(!collisionWithBlock((int) (x + bounds.x)  / Block.WIDTH , tempY) 
-					&& !collisionWithBlock((int) (x + bounds.x + bounds.width) / Block.WIDTH, tempY)) {
-				
-				y += yMove * dt;
-				
+			
+		
+			dead = false;
+			
+			if(!onLadder((int) (x + bounds.x)  / Block.WIDTH , tempY) 
+					&& !onLadder((int) (x + bounds.x + bounds.width) / Block.WIDTH, tempY)) {
+				onLadder = false;
+				upwardSpeed += gravity * dt;
+				y += upwardSpeed * dt;
+	
+				if(!collisionWithBlock((int) (x + bounds.x)  / Block.WIDTH , tempY) 
+						&& !collisionWithBlock((int) (x + bounds.x + bounds.width) / Block.WIDTH, tempY)) {
+	
+					y += yMove * dt;
+					
+				}
+				else {
+					
+					upwardSpeed = 0;
+					y = tempY * Block.HEIGHT - bounds.height - bounds.y;
+					
+					
+				}
 			}
-			else {
-				
-				upwardSpeed = 0;
-				midAir = false;
-				y = tempY * Block.HEIGHT - bounds.height - bounds.y;
-				
-				
-			}
+		}
+		else {
+			dead = true;
 		}
 	}
 	//----------
@@ -134,8 +159,16 @@ public abstract class Creature extends Entity {
 		return Map.getBlock(x, y).isSolid();
 	}
 	
+	protected boolean collisionWithSpike(int x, int y) {
+		return Map.getBlock(x, y).isKill();
+	}
+	
 	protected boolean onLadder(int x, int y) {
 		return Map.getBlock(x, y).isLadder();
+	}
+	
+	protected boolean isDoor(int x, int y) {
+		return Map.getBlock(x, y).isDoor();
 	}
 	
 	//------------GETTERS AND SETTERS

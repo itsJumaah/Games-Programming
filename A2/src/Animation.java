@@ -1,7 +1,6 @@
-package stormtroopers.graphics;
+
 
 import java.awt.Image;
-import stormtroopers.GameEngine;
 
 public class Animation {
 	
@@ -38,13 +37,19 @@ public class Animation {
 	}
 	
 	//---------
-	public void setCurrentFrame(int index) {
-		this.index = index;
-	}
-	//---------
-	public Image getCurrentFrame() {
+	public Image getLoopFrame() {
 		return frames[index];
 	}
 	//---------
+	public Image getAltFrame() {
+		return frames[num];
+	}
+	//--------
+	public int getFrameNum() {
+		return num;
+	}
+	public void setFrameNum(int num) {
+		this.num = num;
+	}
 	
 }

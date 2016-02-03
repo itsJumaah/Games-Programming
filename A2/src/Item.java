@@ -1,7 +1,4 @@
-package stormtroopers.entities;
 
-import stormtroopers.GameEngine;
-import stormtroopers.MainGame;
 
 public class Item extends Entity{
 	
