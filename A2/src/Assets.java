@@ -24,7 +24,7 @@ public class Assets {
 	private Image[] walkL, walkR, ladderA, jumpL, jumpR;
 	
 	//------
-	private Image hud, mBG, exit, exitOver, inst, instOver, instPage, play, playOver, gameOver;
+	private Image hud, mBG, exit, exitOver, inst, instOver, instPage, play, playOver, gameOver, score;
 	
 	//all the assets were loaded for future updates
 	
@@ -44,6 +44,7 @@ public class Assets {
 		play = engine.loadImage("res/state/mPlay.png");
 		playOver = engine.loadImage("res/state/mPlayOver.png");
 		gameOver = engine.loadImage("res/GameOver.png");
+		score = engine.loadImage("res/score.png");
 		
 		// cropping the first row
 		floor      = engine.subImage(blocksheet, 0 * WWIDTH, 0 * WHEIGHT, WWIDTH, WHEIGHT);
@@ -106,6 +107,9 @@ public class Assets {
 		return hud;
 	}
 	
+	public Image getScore() {
+		return score;
+	}
 	public Image getGameOver() {
 		return gameOver;
 	}

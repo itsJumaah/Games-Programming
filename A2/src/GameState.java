@@ -67,12 +67,9 @@ public class GameState extends State {
 		}
 		
 		else if (HUD.level == 4) { //if the player win
-			engine.changeColor(engine.black);
-			engine.drawSolidRectangle(0, 0, 512, 512);
-			engine.drawImage(bg, 0, 0);
-			engine.changeColor(engine.white);
-			engine.drawText(50, 150, "Your score is: " + Integer.toString(Player.finalScore) + "\n", "Arial", 30);
-			engine.drawText(50, 200, "Stay tuned for more maps!\n", "Arial", 20);
+			engine.drawImage(asset.getScore(), 0, 0);
+			engine.changeColor(engine.yellow);
+			engine.drawText(240, 270, Integer.toString(Player.finalScore), "Arial", 40);
 			
 		}
 		else {
