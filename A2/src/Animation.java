@@ -1,4 +1,7 @@
 
+//Game made by Team Stormtroopers: Bilal Jumaah   - 12232659
+//								   Andrew Creevey - 12236284
+//							       Jordan Smith   - 12194358
 
 import java.awt.Image;
 
@@ -21,7 +24,7 @@ public class Animation {
 		
 	}
 	
-	
+	//--- updating the variables
 	public void update(GameEngine engine) {
 		timer += engine.getTime() - lastTime;
 		lastTime = engine.getTime();
@@ -35,6 +38,7 @@ public class Animation {
 			}
 		}
 	}
+	//----GETTERS
 	
 	//---------
 	public Image getLoopFrame() {

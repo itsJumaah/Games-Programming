@@ -1,11 +1,17 @@
 
+//Game made by Team Stormtroopers: Bilal Jumaah   - 12232659
+//								   Andrew Creevey - 12236284
+//							       Jordan Smith   - 12194358
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class StormEngine {
+	//--- Expansion for the game engine 
+	//--- to help us use the call functions easily
 	
+	//-- To READ IN FILES
 	public static String loadFileString(String path) {
 		StringBuilder builder = new StringBuilder(); //allow us to add characters to string
 		
@@ -25,7 +31,7 @@ public class StormEngine {
 		return builder.toString();
 		
 	}
-	
+	//-- TO CONVERT STRING INTO INTEGER
 	public static int parseInt(String num) {
 		try {
 			return Integer.parseInt(num); //convert the string into int

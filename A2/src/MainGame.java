@@ -1,15 +1,16 @@
 
+//Game made by Team Stormtroopers: Bilal Jumaah   - 12232659
+//								   Andrew Creevey - 12236284
+//							       Jordan Smith   - 12194358
 
 import java.awt.event.KeyEvent;
 
-
-
-public class MainGame extends GameEngine{
+public class MainGame extends GameEngine {
 
 	
-	public boolean up, down, left, right, space, x;
+	public boolean up, down, left, right;
 	
-	private State gameState, menuState;
+	private State gameState, menuState, instructionState;
 	
 	//--------------------
 	//	INITIALIZE
@@ -21,14 +22,13 @@ public class MainGame extends GameEngine{
 		down = false;
 		left = false;
 		right = false;
-		space = false;
-		x = false;
 		
 		gameState = new GameState(this);
 		menuState = new MenuState(this);
+		instructionState = new InstructionsState(this);
 	
-		State.setState(gameState);
-		//State.setState(menuState);
+		//State.setState(gameState);
+		State.setState(menuState);
 	}
 	//-----------------------
 	//UPDATE VALUES AND DRAWS
@@ -43,7 +43,6 @@ public class MainGame extends GameEngine{
 
 	@Override
 	public void paintComponent() {
-		
 		if(State.getState() != null) {
 			State.getState().draw(this);
 		}
@@ -55,7 +54,54 @@ public class MainGame extends GameEngine{
 	//-------------------------------------------------------
 
 	// Called whenever a key is pressed
+	@Override
 	public void keyPressed(KeyEvent e) {
+		if(State.getState() == gameState) {
+			keyPressedGame(e);
+		}
+		else if(State.getState() == menuState) {
+			keyPressedMenu(e);
+		}
+		else if(State.getState() == instructionState) {
+			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+				State.setState(menuState);
+			}
+		}
+		
+		
+	}
+	// MENU BUTTONS
+	public void keyPressedMenu(KeyEvent e) {
+		// up
+		if(e.getKeyCode() == KeyEvent.VK_UP) {
+			if(MenuState.selectedOption > 0) {
+				MenuState.selectedOption--;
+			}
+		}
+		// down
+		if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+			if(MenuState.selectedOption < 2) {
+				MenuState.selectedOption++;
+			}
+		}
+		//enter
+		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+			if(MenuState.selectedOption == 0) {
+				State.setState(gameState); // starts the game
+			}
+			else if(MenuState.selectedOption == 1) {
+				State.setState(instructionState);
+			}
+			else {
+				System.exit(0);
+			}
+		}
+		
+	}
+	
+	//------------
+	//GAME BUTTONS
+	public void keyPressedGame(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_UP) {
 			up = true;
 		}
@@ -68,15 +114,14 @@ public class MainGame extends GameEngine{
 		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			right = true;
 		}
-		else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			space = true;
-		}
-		else if (e.getKeyCode() == KeyEvent.VK_X) {
-			x = true;
-		}
+		
 	}
 	// Called whenever a key is released
+	@Override
 	public void keyReleased(KeyEvent e) {
+		keyReleasedGame(e);
+	}
+	public void keyReleasedGame(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_UP) {
 			up = false;
 		}
@@ -88,12 +133,6 @@ public class MainGame extends GameEngine{
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			right = false;
-		}
-		else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			space = false;
-		}
-		else if (e.getKeyCode() == KeyEvent.VK_X) {
-			x = false;
 		}
 	}
 }

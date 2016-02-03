@@ -1,19 +1,17 @@
+//Game made by Team Stormtroopers: Bilal Jumaah   - 12232659
+//								   Andrew Creevey - 12236284
+//							       Jordan Smith   - 12194358
+
 public abstract class Creature extends Entity {
 
-	
-	
-	protected int health;
-	
 	protected float speed;
 	protected float xMove;
 	protected float yMove;
-	protected float jump;
 	protected float gravity;
 	protected float upwardSpeed;
 	
-	protected boolean onLadder, dead, levelup;
+	protected boolean onLadder, dead, levelup, enterwater, reachedChest;
 	
-	public static final int   DEFAULT_HEALTH          = 10;
 	public static final int   DEFAULT_CREATURE_WIDTH  = 32,
 							  DEFAULT_CREATURE_HEIGHT = 32;
 	
@@ -24,38 +22,64 @@ public abstract class Creature extends Entity {
 	
 	public Creature(float x, float y, int width, int height) {
 		super(x, y, width, height);
-		
-		health  = DEFAULT_HEALTH;
+		//Intializing variables
 		speed   = DEFAULT_SPEED;
-		jump    = -JUMP_POWER;
 		gravity = GRAVITY;
 		upwardSpeed = 0;
 		onLadder = false;
 		dead = false;
 		levelup = false;
+		enterwater = false;
+		reachedChest = false;
 		
 	}
 	
 	public void move(double dt) {
+		//updating the entity movement and checking for collisions + identifying the collision kinds
+		door(dt);
+		chest(dt);
+		water(dt);
+		moveX(dt);
+		moveY(dt);
+		fall(dt);
 		
-		if(isDoor((int)x/Block.WIDTH , (int)y/Block.HEIGHT) && isDoor((int)x / Block.WIDTH, (int) y / Block.HEIGHT)) {
+		
+	}
+	//-----
+	private void door(double dt) {
+		if(isDoor((int)x/Block.WIDTH , (int)y/Block.HEIGHT) && isDoor((int)(x + bounds.width + bounds.x)/ Block.WIDTH  , (int) y / Block.HEIGHT)) {
 			levelup = true;
 		}
 		else {
 			levelup = false;
 		}
-		
-		moveX(dt);
-		moveY(dt);
-		jump(dt);
-		
-		
 	}
 	
-	public void moveX(double dt) {
+	private void chest(double dt) {
+		if(reachedChest((int) x/Block.WIDTH, (int)y/Block.HEIGHT) && reachedChest((int)(x + bounds.width + bounds.x)/ Block.WIDTH  , (int) y / Block.HEIGHT)) {
+			reachedChest = true;
+		}
+		else {
+			reachedChest = false;
+		}
+	}
+	
+	private void water(double dt) {
+		int tempY = (int) (y + (yMove * dt) + bounds.y + bounds.height) / Block.HEIGHT;
+		if(enterWater((int) ((x + bounds.x)  / Block.WIDTH) , tempY) && enterWater((int) (x + bounds.x + bounds.width) / Block.WIDTH, tempY)) {
+			enterwater = true;
+		}
+		else {
+			enterwater = false;
+		}
+	}
+	//---------- Collision detection against x-axis
+	private void moveX(double dt) {
 		//-----Moving Right
 		if(xMove > 0) {
 			int tempX = (int) (x + (xMove * dt) + bounds.x + bounds.width) / Block.WIDTH;
+			
+			
 			
 			if(!collisionWithBlock(tempX, (int) (((y + bounds.y) / Block.HEIGHT) -100)) 
 					&& !collisionWithBlock(tempX, (int) (((y + bounds.y + bounds.height) / Block.HEIGHT) -0.5))) {
@@ -80,8 +104,8 @@ public abstract class Creature extends Entity {
 			}
 		}
 	}
-	
-	public void moveY(double dt) {
+	//---------- Collision detection against y-axis
+	private void moveY(double dt) {
 		//----Going Up
 		if(yMove < 0) {
 			int tempY = (int) (y + (yMove * dt)+ bounds.y) / Block.HEIGHT; //top edge
@@ -117,8 +141,8 @@ public abstract class Creature extends Entity {
 			}
 		}
 	}
-	
-	public void jump(double dt) {
+	//---------- Collision detection against free fall
+	private void fall(double dt) {
 		//----- GRAVITY TO ENABLE JUMP
 		
 		int tempY = (int) (y + (yMove * dt) + bounds.y + bounds.height) / Block.HEIGHT; //bottom edge
@@ -126,7 +150,6 @@ public abstract class Creature extends Entity {
 				&& !collisionWithSpike((int) (x + bounds.x + bounds.width) / Block.WIDTH, tempY)) {
 			
 			
-		
 			dead = false;
 			
 			if(!onLadder((int) (x + bounds.x)  / Block.WIDTH , tempY) 
@@ -154,7 +177,11 @@ public abstract class Creature extends Entity {
 			dead = true;
 		}
 	}
-	//----------
+	//---------------
+	protected boolean reachedChest(int x, int y) {
+		return Map.getBlock(x, y).isChest();
+	}
+	
 	protected boolean collisionWithBlock(int x, int y) {
 		return Map.getBlock(x, y).isSolid();
 	}
@@ -171,15 +198,12 @@ public abstract class Creature extends Entity {
 		return Map.getBlock(x, y).isDoor();
 	}
 	
+	protected boolean enterWater(int x, int y) {
+		return Map.getBlock(x, y).splash();
+	}
+	
 	//------------GETTERS AND SETTERS
 
-	public int getHealth() {
-		return health;
-	}
-
-	public void setHealth(int health) {
-		this.health = health;
-	}
 
 	public float getSpeed() {
 		return speed;
