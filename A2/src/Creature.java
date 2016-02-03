@@ -10,7 +10,7 @@ public abstract class Creature extends Entity {
 	protected float gravity;
 	protected float upwardSpeed;
 	
-	protected boolean onLadder, dead, levelup, enterwater, reachedChest;
+	protected boolean onLadder, dead, levelup, reachedChest;
 	
 	public static final int   DEFAULT_CREATURE_WIDTH  = 32,
 							  DEFAULT_CREATURE_HEIGHT = 32;
@@ -29,7 +29,6 @@ public abstract class Creature extends Entity {
 		onLadder = false;
 		dead = false;
 		levelup = false;
-		enterwater = false;
 		reachedChest = false;
 		
 	}
@@ -38,7 +37,6 @@ public abstract class Creature extends Entity {
 		//updating the entity movement and checking for collisions + identifying the collision kinds
 		door(dt);
 		chest(dt);
-		water(dt);
 		moveX(dt);
 		moveY(dt);
 		fall(dt);
@@ -64,15 +62,7 @@ public abstract class Creature extends Entity {
 		}
 	}
 	
-	private void water(double dt) {
-		int tempY = (int) (y + (yMove * dt) + bounds.y + bounds.height) / Block.HEIGHT;
-		if(enterWater((int) ((x + bounds.x)  / Block.WIDTH) , tempY) && enterWater((int) (x + bounds.x + bounds.width) / Block.WIDTH, tempY)) {
-			enterwater = true;
-		}
-		else {
-			enterwater = false;
-		}
-	}
+	
 	//---------- Collision detection against x-axis
 	private void moveX(double dt) {
 		//-----Moving Right
@@ -196,10 +186,6 @@ public abstract class Creature extends Entity {
 	
 	protected boolean isDoor(int x, int y) {
 		return Map.getBlock(x, y).isDoor();
-	}
-	
-	protected boolean enterWater(int x, int y) {
-		return Map.getBlock(x, y).splash();
 	}
 	
 	//------------GETTERS AND SETTERS

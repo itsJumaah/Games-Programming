@@ -8,7 +8,7 @@ public class Block {
 	
 	private final int id; //each block contain a unique ID
 	private Image texture;
-	private boolean solid, ladder, kill, next, splash, box; // to determine what kind of block it is
+	private boolean solid, ladder, kill, next, box; // to determine what kind of block it is
 	
 	public static final int WIDTH = 32, HEIGHT = 32; // block dimensions
 
@@ -49,13 +49,7 @@ public class Block {
 		else {
 			next = false;
 		}
-		//-----water splash
-		if(id == 4) {
-			splash = true;
-		}
-		else {
-			splash = false;
-		}
+		
 		if(id == 14 || id == 7) {
 			solid = false;
 			box = true;
@@ -75,10 +69,7 @@ public class Block {
 	public boolean isChest() {
 		return box;
 	}
-	
-	public boolean splash() {
-		return splash;
-	}
+
 	
 	public boolean isKill() {
 		return kill;

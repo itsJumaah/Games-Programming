@@ -3,14 +3,11 @@
 //								   Andrew Creevey - 12236284
 //							       Jordan Smith   - 12194358
 
-import java.awt.Image;
-
 public class GameState extends State {
 	
 	private Map map1, map2, map3;
 	private HUD hud;
 	private Assets asset;
-	private Image bg;
 	// -- game state to decide which state the game is on
 	public GameState(GameEngine engine) {
 
@@ -21,7 +18,6 @@ public class GameState extends State {
 		map2 = new Map(engine, "res/map2.stmap");
 		map3 = new Map(engine, "res/map3.stmap");
 		
-		bg = asset.getHUD();
 	
 	}
 

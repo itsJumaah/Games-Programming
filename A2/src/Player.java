@@ -8,7 +8,7 @@ public class Player extends Creature {
 
 	private Assets asset;
 	private Animation walkL, walkR, ladderA, jumpR, jumpL;
-	private GameEngine.AudioClip death, level, splash, winnerWinnerChickenDinner;
+	private GameEngine.AudioClip death, level, winnerWinnerChickenDinner;
 	public static int finalScore;
 	
 	private boolean right, left;
@@ -24,7 +24,7 @@ public class Player extends Creature {
 		//---- sound initializing
 		death = engine.loadAudio("res/death.wav");
 		level = engine.loadAudio("res/level.wav");
-		splash = engine.loadAudio("res/water.wav");
+		
 		winnerWinnerChickenDinner = engine.loadAudio("res/game.wav");
 		//---- assets and animation initializing
 		
@@ -90,12 +90,6 @@ public class Player extends Creature {
 		if(levelup) {
 			engine.playAudio(level);
 			HUD.level++;
-		}
-		
-		// if the player hit the under water splash
-		
-		if(enterwater) {
-			engine.playAudio(splash);
 		}
 		
 		//if the player reach the chest in the final map
