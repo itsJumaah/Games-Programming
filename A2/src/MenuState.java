@@ -7,6 +7,7 @@
 public class MenuState extends State {
 	
 	//Main menu class
+	GameEngine.AudioClip music;
 	private Assets asset;
 	public static int selectedOption;
 	
@@ -14,11 +15,13 @@ public class MenuState extends State {
 		selectedOption = 0;
 		
 		asset = new Assets(engine);
-		
+		music = engine.loadAudio("res/music.wav");
+		engine.startAudioLoop(music, 0.3f);
 	}
 
 	@Override
 	public void update(MainGame control, double dt) {
+		
 		
 		
 	}
